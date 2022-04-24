@@ -25,10 +25,6 @@ function getVersion(type, version) {
     }
 }
 
-
-
-console.log(getVersion("vanilla", "1.14.4"));
-
 function log(type, content) {
     if (type == "error") {
         console.log("\x1b[31m%s\x1b[0m", `${type.toUpperCase()} || ${content}`);
