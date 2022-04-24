@@ -2,3 +2,7 @@
 ## Daemon for [Omnipetal (Client)](https://github.com/juaneth/Omnipetal)
 
 <img src="https://user-images.githubusercontent.com/68202118/163295548-453fee68-0ef9-4483-bff4-75d16dda3776.png" width="800">
+
+## API
+
+API Config is all located in `./config.json` and you can change API settings there, eg. Port, Auth Key
