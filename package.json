@@ -1,26 +1,27 @@
 {
-  "name": "omnipetal-daemon",
-  "version": "1.0.0",
-  "description": "Daemon for Omnipetal Minecraft Server Manager",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/juaneth/Omnipetal-Daemon.git"
-  },
-  "keywords": [
-    "daemon",
-    "docker"
-  ],
-  "author": "juaneth",
-  "license": "SEE LICENSE IN license",
-  "bugs": {
-    "url": "https://github.com/juaneth/Omnipetal-Daemon/issues"
-  },
-  "homepage": "https://github.com/juaneth/Omnipetal-Daemon#readme",
-  "dependencies": {
-    "axios": "^0.26.1"
-  }
+    "name": "omnipetal-daemon",
+    "version": "0.0.1",
+    "description": "Daemon for Omnipetal Minecraft Server Manager",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/juaneth/Omnipetal-Daemon.git"
+    },
+    "keywords": [
+        "daemon",
+        "docker"
+    ],
+    "author": "juaneth",
+    "license": "SEE LICENSE IN license",
+    "bugs": {
+        "url": "https://github.com/juaneth/Omnipetal-Daemon/issues"
+    },
+    "homepage": "https://github.com/juaneth/Omnipetal-Daemon#readme",
+    "dependencies": {
+        "axios": "^0.26.1",
+        "express": "^4.17.3"
+    }
 }
