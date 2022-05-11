@@ -1,10 +1,10 @@
 // Setup express
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 2065;
 
-const installer = require('./installer/installer.js');
-let version = installer.version(); // val is "alpha-0.0.1"
+const serverVersions = require('./serverVersions/versions.js');
+let version = serverVersions.version(); // val is "alpha-0.0.1"
 
 function createStore(path) {
     let defaultsettings = {
@@ -24,47 +24,41 @@ function createStore(path) {
 }
 // API Root Endpoint
 app.get('/', (req, res) => {
-        res.json({
-            "alive": "true",
-        })
+        if (req.query.passkey == "debug" && process.argv.includes('dev')) {
+            console.log("\x1b[32m%s\x1b[0m", `Server created`);
+
+            res.json({
+                "alive": "true",
+                "debugActivated": "true",
+            })
+        } else {
+            res.json({
+                "alive": "true",
+            })
+        }
     })
     // API Endpoint to create a new server
 app.post('/create-server', (req, res) => {
-    res.json({
-        "underConstruction": "true",
-    })
+    if (req.query.passkey == "debug" && process.argv.includes('dev')) {
+        console.log("\x1b[32m%s\x1b[0m", `Server created`);
+
+        res.json({
+            "underConstruction": "true",
+            "debugActivated": "true",
+        })
+    } else {
+        res.json({
+            "underConstruction": "true",
+        })
+    }
 })
 
 app.listen(port, () => {
     console.log(`[X] -- Daemon running on port ${port} -- [X]`)
 })
 
-function getVersion(type, version) {
-    if (type == "vanilla") {
-        const axios = require('axios');
 
-        axios.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').then(response => {
-                const versions = response.data.versions;
-                versions.forEach(element => {
-                    if (element.type == "release") {
-                        if (element.id == version) {
-                            axios.get(element.url).then(response => {
-                                    let download = response.data.downloads.server.url;
-
-                                    return download;
-                                })
-                                .catch(error => {
-                                    console.log(error);
-                                });
-                        }
-                    }
-                })
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-}
+console.log(serverVersions.getVersion("vanilla", "1.14.4"));
 
 function log(type, content) {
     if (type == "error") {
