@@ -6,6 +6,8 @@ const fs = require("fs");
 if (!fs.existsSync("./config.json")) {
     const template = {
         "port": "2065",
+        "whitelist": false,
+        "auth": false,
     }
 
     fs.writeFileSync("./config.json", JSON.stringify(template), "utf8");
@@ -40,18 +42,42 @@ function createStore(path) {
 // API Root Endpoint
 app.get('/', (req, res) => {
         if (req.query.passkey == "debug" && process.argv.includes('dev')) {
-            res.json({
-                "alive": "true",
-                "debugActivated": "true",
-            })
+            let response = {
+                "alive": true,
+                "whitelist": false,
+                "auth": false,
+                "debugActivated": true,
+            }
+
+            if (config.whitelist) {
+                response.whitelist = true
+            }
+
+            if (config.auth) {
+                response.auth = true
+            }
+
+            res.json(response)
 
             console.log("\x1b[32m%s\x1b[0m", `Server created`);
         } else {
-            res.json({
-                "alive": "true",
-                "ip": "false",
-                "auth": "false",
-            })
+            let response = {
+                "alive": true,
+                "whitelist": false,
+                "auth": false,
+            }
+
+            if (config.whitelist) {
+                response.whitelist = true
+            }
+
+            if (config.auth) {
+                response.auth = true
+            }
+
+            res.json(response)
+
+
         }
     })
     // API Endpoint to create a new server
