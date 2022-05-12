@@ -1,38 +1,63 @@
 module.exports = {
-    version: function() {
+    appVersion: function() {
         var pjson = require('../package.json');
         version = pjson.version;
 
         return version;
     },
 
-    getVersion: function(type, version) {
-        if (type == "vanilla") {
-            const axios = require('axios');
+    getVersion: async function(type, version) {
+        return new Promise((resolve, reject) => {
+            if (type == "vanilla") {
+                const axios = require('axios');
 
-            axios.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').then(response => {
-                    const versions = response.data.versions;
-                    versions.forEach(element => {
-                        if (element.type == "release") {
-                            if (element.id == version) {
-                                axios.get(element.url).then(response => {
-                                        let download = response.data.downloads.server.url;
+                axios.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').then(response => {
+                        const versions = response.data.versions;
+                        versions.forEach(element => {
+                            if (element.type == "release") {
+                                if (element.id == version) {
+                                    axios.get(element.url).then(response => {
+                                        if (!response.data.downloads.hasOwnProperty('server')) {
+                                            console.log("\x1b[31m%s\x1b[0m", `[X] -- Version ${version} server.jar not found -- [X]`);
+                                            return;
+                                        }
 
-                                        console.log(download);
-
-                                        return `${download}`;
+                                        resolve(response.data.downloads.server.url);
                                     })
-                                    .catch(error => {
-                                        console.log(error);
-                                    });
+                                }
                             }
-                        }
+                        })
                     })
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+        })
+    },
+
+    getVersionsList: function(type) {
+        return new Promise((resolve, reject) => {
+            if (type == "vanilla") {
+                const axios = require('axios');
+
+                axios.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').then(response => {
+                        const versions = response.data.versions;
+
+                        let allVersions = new Array;
+
+                        versions.forEach(element => {
+                            if (element.type == "release") {
+                                allVersions.push(element.id);
+                            }
+
+                            resolve(allVersions);
+                        })
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+        })
     },
 
     create: function() {
