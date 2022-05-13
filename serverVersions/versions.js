@@ -6,7 +6,7 @@ module.exports = {
         return version;
     },
 
-    getVersion: async function(type, version) {
+    getVersionDownload: async function(type, version) {
         return new Promise((resolve, reject) => {
             if (type == "vanilla") {
                 const axios = require('axios');
@@ -35,7 +35,29 @@ module.exports = {
         })
     },
 
-    getVersionsList: function(type) {
+    getVersion: async function(type, version) {
+        return new Promise((resolve, reject) => {
+            if (type == "vanilla") {
+                const axios = require('axios');
+
+                axios.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').then(response => {
+                        const versions = response.data.versions;
+                        versions.forEach(element => {
+                            if (element.type == "release") {
+                                if (element.id == version) {
+                                    resolve(element);
+                                }
+                            }
+                        })
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+        })
+    },
+
+    getVersionList: function(type) {
         return new Promise((resolve, reject) => {
             if (type == "vanilla") {
                 const axios = require('axios');
@@ -47,11 +69,11 @@ module.exports = {
 
                         versions.forEach(element => {
                             if (element.type == "release") {
-                                allVersions.push(element.id);
+                                allVersions.push(element);
                             }
-
-                            resolve(allVersions);
                         })
+
+                        resolve(allVersions);
                     })
                     .catch(error => {
                         console.log(error);
