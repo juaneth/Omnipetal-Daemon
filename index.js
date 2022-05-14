@@ -87,8 +87,6 @@ app.get('/getVersionDownload', (req, res) => {
 // API Endpoint to create a new server
 app.post('/create-server', (req, res) => {
     if (req.query.passkey == "debug" && process.argv.includes('dev')) {
-        console.log("\x1b[32m%s\x1b[0m", `Server created`);
-
         res.json({
             "underConstruction": "true",
             "debugActivated": "true",

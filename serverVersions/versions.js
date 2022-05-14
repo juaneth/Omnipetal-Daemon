@@ -18,7 +18,7 @@ module.exports = {
                                 if (element.id == version) {
                                     axios.get(element.url).then(response => {
                                         if (!response.data.downloads.hasOwnProperty('server')) {
-                                            console.log("\x1b[31m%s\x1b[0m", `[X] -- Version ${version} server.jar not found -- [X]`);
+                                            resolve("\x1b[31m%s\x1b[0m", `[X] -- Version ${version} server.jar not found -- [X]`);
                                             return;
                                         }
 
