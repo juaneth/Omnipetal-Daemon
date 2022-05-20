@@ -77,6 +77,7 @@ module.exports = {
                                     "1.2.3",
                                     "1.2.4",
                                 ]
+
                                 if (!historicVersions.includes(element.id)) {
                                     allVersions.push(element);
                                 }
