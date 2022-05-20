@@ -69,7 +69,17 @@ module.exports = {
 
                         versions.forEach(element => {
                             if (element.type == "release") {
-                                allVersions.push(element);
+                                const historicVersions = [
+                                    "1.0",
+                                    "1.1",
+                                    "1.2.1",
+                                    "1.2.2",
+                                    "1.2.3",
+                                    "1.2.4",
+                                ]
+                                if (!historicVersions.includes(element.id)) {
+                                    allVersions.push(element);
+                                }
                             }
                         })
 
