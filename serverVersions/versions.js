@@ -1,3 +1,14 @@
+const historicVersions = [
+    "1.0",
+    "1.1",
+    "1.2.1",
+    "1.2.2",
+    "1.2.3",
+    "1.2.4",
+]
+
+const axios = require('axios');
+
 module.exports = {
     appVersion: function() {
         var pjson = require('../package.json');
@@ -9,8 +20,6 @@ module.exports = {
     getVersionDownload: async function(type, version) {
         return new Promise((resolve, reject) => {
             if (type == "vanilla") {
-                const axios = require('axios');
-
                 axios.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').then(response => {
                         const versions = response.data.versions;
                         versions.forEach(element => {
@@ -38,8 +47,6 @@ module.exports = {
     getVersion: async function(type, version) {
         return new Promise((resolve, reject) => {
             if (type == "vanilla") {
-                const axios = require('axios');
-
                 axios.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').then(response => {
                         const versions = response.data.versions;
                         versions.forEach(element => {
@@ -60,8 +67,6 @@ module.exports = {
     getVersionList: function(type) {
         return new Promise((resolve, reject) => {
             if (type == "vanilla") {
-                const axios = require('axios');
-
                 axios.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').then(response => {
                         const versions = response.data.versions;
 
@@ -69,15 +74,6 @@ module.exports = {
 
                         versions.forEach(element => {
                             if (element.type == "release") {
-                                const historicVersions = [
-                                    "1.0",
-                                    "1.1",
-                                    "1.2.1",
-                                    "1.2.2",
-                                    "1.2.3",
-                                    "1.2.4",
-                                ]
-
                                 if (!historicVersions.includes(element.id)) {
                                     allVersions.push(element);
                                 }
