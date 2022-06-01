@@ -1,4 +1,5 @@
 const fs = require("fs");
+const si = require("systeminformation");
 
 module.exports = {
     checkExists: function() {
@@ -30,4 +31,15 @@ module.exports = {
 
         return port;
     },
+
+    systemMemory: function() {
+        return new Promise((resolve, reject) => {
+            let memory = si.mem().then(data => {
+                // Return total memory in GB
+                resolve(Math.round(data.total / 1024 / 1024 / 1024))
+            }).catch(error => {
+                reject(error);
+            })
+        })
+    }
 }

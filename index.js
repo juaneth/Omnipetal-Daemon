@@ -83,6 +83,13 @@ app.get('/getVersionDownload', (req, res) => {
     }
 })
 
+// API Endpoint to get System Memory
+app.get('/systemMemory', (req, res) => {
+    let systemMemory = config.systemMemory().then(data => {
+        res.json({ "memory": data })
+    })
+})
+
 
 // API Endpoint to create a new server
 app.post('/create-server', (req, res) => {
