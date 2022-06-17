@@ -8,10 +8,13 @@ const app = express()
 const port = config.port();
 
 const serverVersions = require('./serverVersions/versions.js');
+const passkeys = require('./passkeys.js');
+
+passkeys.setPasskey(process.argv[2]);
 
 // API Root Endpoint
 app.get('/', (req, res) => {
-    if (req.query.passkey == "debug" && process.argv.includes('dev')) {
+    if (process.argv.includes('dev')) {
         let response = {
             "alive": true,
             "whitelist": false,
@@ -93,7 +96,7 @@ app.get('/systemMemory', (req, res) => {
 
 // API Endpoint to create a new server
 app.post('/create-server', (req, res) => {
-    if (req.query.passkey == "debug" && process.argv.includes('dev')) {
+    if (process.argv.includes('dev')) {
         res.json({
             "underConstruction": "true",
             "debugActivated": "true",

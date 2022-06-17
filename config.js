@@ -9,7 +9,7 @@ module.exports = {
                 "port": "2065",
                 "whitelist": false,
                 "auth": false,
-                "ip": "localhost",
+                "display-ip": "localhost",
             }
 
             fs.writeFileSync("./config.json", JSON.stringify(template), "utf8");
