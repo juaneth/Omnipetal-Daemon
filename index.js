@@ -108,6 +108,7 @@ app.post('/create-server', (req, res) => {
     }
 })
 
+// Show the server's IP address
 app.listen(port, () => {
     console.log(`[X] -- Daemon running on http://${config.ip()}:${config.port()} -- [X]`)
 })
