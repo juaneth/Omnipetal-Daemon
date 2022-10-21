@@ -15,7 +15,7 @@ Ensure you have nodeJS installed and ready (if unsure run `node -v`) and pm2 ins
 git clone https://github.com/juaneth/Omnipetal-Daemon.git
 cd Omnipetal-Daemon
 npm i
-pm2 start index.js
+pm2 start /src/index.js
 ```
 
 ## Config
