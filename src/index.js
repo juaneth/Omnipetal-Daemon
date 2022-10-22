@@ -7,14 +7,18 @@ const express = require("express");
 const app = express();
 const port = config.port();
 
+// Import things
 const serverVersions = require("../serverVersions/versions.js");
 const passkeys = require("./passkeys.js");
-
 const endpoints = require("./endpoints.js");
 
-endpoints.root(app);
+// DEV
+passkeys.setPasskey("AAABBB");
 
+// Add endpoints
+endpoints.root(app);
 endpoints.versions(app);
+endpoints.servers(app);
 
 // API Endpoint to get System Memory
 app.get("/systemMemory", (req, res) => {
@@ -40,6 +44,6 @@ app.post("/create-server", (req, res) => {
 // Show the server's IP address
 app.listen(port, () => {
     console.log(
-        `[X] -- Daemon running on http://${config.ip()}:${config.port()} -- [X]`
+        `[X] ------- Daemon running on http://${config.ip()}:${config.port()} ------- [X]`
     );
 });

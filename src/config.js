@@ -10,6 +10,7 @@ module.exports = {
                 whitelist: false,
                 auth: false,
                 "display-ip": "localhost",
+                servers: [],
             };
 
             fs.writeFileSync("../config.json", JSON.stringify(template), "utf8");
@@ -30,6 +31,14 @@ module.exports = {
         let port = config.port;
 
         return port;
+    },
+
+    servers: function() {
+        const config = require("../config.json");
+
+        let servers = config.servers;
+
+        return servers;
     },
 
     systemMemory: function() {
