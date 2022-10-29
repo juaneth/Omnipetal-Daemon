@@ -1,6 +1,20 @@
-const config = require("./config.js");
+const fs = require("fs");
 
-config.checkExists();
+if (!fs.existsSync("./config.json")) {
+    const template = {
+        port: "2065",
+        whitelist: false,
+        auth: false,
+        "display-ip": "localhost",
+        client: false,
+    };
+
+    fs.writeFileSync("./config.json", JSON.stringify(template), "utf8");
+}
+
+const web = require("./web.js");
+
+const config = require("./config.js");
 
 // Setup express
 const express = require("express");
@@ -19,6 +33,12 @@ passkeys.setPasskey("AAABBB");
 endpoints.root(app);
 endpoints.versions(app);
 endpoints.servers(app);
+
+if (config.client) {
+    web.pull().then((done) => {
+        web.server(app, express);
+    });
+}
 
 // API Endpoint to get System Memory
 app.get("/systemMemory", (req, res) => {

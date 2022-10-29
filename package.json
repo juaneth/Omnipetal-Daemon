@@ -23,7 +23,9 @@
     "dependencies": {
         "axios": "^0.26.1",
         "bcrypt": "^5.0.1",
+        "download": "^8.0.0",
         "express": "^4.17.3",
+        "extract-zip": "^2.0.1",
         "systeminformation": "^5.11.16"
     }
 }

@@ -2,21 +2,6 @@ const fs = require("fs");
 const si = require("systeminformation");
 
 module.exports = {
-    checkExists: function() {
-        // Check if config file exists, if not create it
-        if (!fs.existsSync("../config.json")) {
-            const template = {
-                port: "2065",
-                whitelist: false,
-                auth: false,
-                "display-ip": "localhost",
-                servers: [],
-            };
-
-            fs.writeFileSync("../config.json", JSON.stringify(template), "utf8");
-        }
-    },
-
     ip: function() {
         const config = require("../config.json");
 
@@ -39,6 +24,14 @@ module.exports = {
         let servers = config.servers;
 
         return servers;
+    },
+
+    client: function() {
+        const config = require("../config.json");
+
+        let client = config.client;
+
+        return client;
     },
 
     systemMemory: function() {

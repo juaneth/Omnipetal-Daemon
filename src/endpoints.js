@@ -67,13 +67,17 @@ module.exports = {
 
     servers: function(app) {
         app.get("/servers/getServers", (req, res) => {
-            passkeys.comparePasskey(req.query.passkey).then((response) => {
-                if (response == true) {
-                    res.json({ servers: config.servers() });
-                } else {
-                    res.json({ error: "BAD AUTHORIZATION" });
-                }
-            });
+            if (req.query && req.query.passkey) {
+                passkeys.comparePasskey(req.query.passkey).then((response) => {
+                    if (response == true) {
+                        res.json({ servers: config.servers() });
+                    } else if (response == false) {
+                        res.json({ error: "BAD AUTHORIZATION" });
+                    }
+                });
+            } else {
+                res.json({ error: "NO AUTHORIZATION" });
+            }
         });
     },
 };
