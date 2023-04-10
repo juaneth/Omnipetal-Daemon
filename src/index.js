@@ -42,7 +42,7 @@ if (config.client) {
 
 // API Endpoint to get System Memory
 app.get("/systemMemory", (req, res) => {
-    let systemMemory = config.systemMemory().then((data) => {
+    config.systemMemory().then((data) => {
         res.json({ memory: data });
     });
 });
