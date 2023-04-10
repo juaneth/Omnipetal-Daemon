@@ -13,11 +13,7 @@ module.exports = {
             bcrypt.compare(passkey, fs.readFileSync("./data", 'utf-8'), function(err, result) {
                 if (err) return reject(err);
                 
-                if (result == true) {
-                    return resolve(true);
-                } else {
-                    return resolve(false)
-                }
+                return resolve(result);
             });
         })
     },

@@ -34,6 +34,23 @@ module.exports = {
         return client;
     },
 
+    auth: function() {
+        const config = require("../config.json");
+
+        let auth = config.auth;
+
+        return auth;
+    },
+
+    authkey: function() {
+        const config = require("../config.json");
+
+        let auth = config?.authkey;
+
+        // Will return undfined if authkey is not set
+        return auth;
+    },
+
     systemMemory: function() {
         return new Promise((resolve, reject) => {
             si.mem()

@@ -27,7 +27,13 @@ const passkeys = require("./passkeys.js");
 const endpoints = require("./endpoints.js");
 
 // DEV
-passkeys.setPasskey("AAABBB");
+if (config.auth() && !config.authkey()) {
+    passkeys.setPasskey("AAABBB");
+}
+else if (config.auth() && config.authkey()) {
+    console.log("Authkey is set, skipping passkey creation");
+    passkeys.setPasskey(config.authkey());
+}
 
 // Add endpoints
 endpoints.root(app);

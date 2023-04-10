@@ -70,23 +70,31 @@ module.exports = {
     },
 
     servers: function(app) {
-        app.get("/servers/getServers", (req, res) => {
+        app.get("/servers/getServers", async (req, res) => {
+            // if no auth, return servers
+            if (!config.auth()) {
+                return res.json({ servers: config.servers() });
+            }
+
             if (!req?.query?.passkey) {
                 return res.json({ error: "NO AUTHORIZATION" });
             }
+            
+            // if auth, check passkey
+            try {
+                let response = await passkeys
+                    .comparePasskey(req.query.passkey);
 
-            passkeys
-                .comparePasskey(req.query.passkey)
-                .then((response) => {
-                    if (!response) {
-                        return res.json({ error: "BAD AUTHORIZATION" });
-                    }
+                if (!response) {
+                    return res.json({ error: "BAD AUTHORIZATION" });
+                }
+                
+                res.json({ servers: config.servers() });
+            } catch (error) {
+                return res.json({ error: err });
                     
-                    res.json({ servers: config.servers() });
-                })
-                .catch((err) => {
-                    res.json({ error: err });
-                });
+            }
+
         });
     },
 };
