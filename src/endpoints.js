@@ -75,13 +75,18 @@ module.exports = {
                 return res.json({ error: "NO AUTHORIZATION" });
             }
 
-            passkeys.comparePasskey(req.query.passkey).then((response) => {
-                if (!response) {
-                    return res.json({ error: "BAD AUTHORIZATION" });
-                }
-                
-                res.json({ servers: config.servers() });
-            });
+            passkeys
+                .comparePasskey(req.query.passkey)
+                .then((response) => {
+                    if (!response) {
+                        return res.json({ error: "BAD AUTHORIZATION" });
+                    }
+                    
+                    res.json({ servers: config.servers() });
+                })
+                .catch((err) => {
+                    res.json({ error: err });
+                });
         });
     },
 };
