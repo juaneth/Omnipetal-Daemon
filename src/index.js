@@ -27,7 +27,13 @@ const passkeys = require("./passkeys.js");
 const endpoints = require("./endpoints.js");
 
 // DEV
-passkeys.setPasskey("AAABBB");
+if (config.auth() && !config.authkey()) {
+    passkeys.setPasskey("AAABBB");
+}
+else if (config.auth() && config.authkey()) {
+    console.log("Authkey is set, skipping passkey creation");
+    passkeys.setPasskey(config.authkey());
+}
 
 // Add endpoints
 endpoints.root(app);
@@ -42,7 +48,7 @@ if (config.client) {
 
 // API Endpoint to get System Memory
 app.get("/systemMemory", (req, res) => {
-    let systemMemory = config.systemMemory().then((data) => {
+    config.systemMemory().then((data) => {
         res.json({ memory: data });
     });
 });

@@ -11,11 +11,9 @@ module.exports = {
     comparePasskey: async function(passkey) {
         return new Promise((resolve, reject) => {
             bcrypt.compare(passkey, fs.readFileSync("./data", 'utf-8'), function(err, result) {
-                if (result == true) {
-                    resolve(true);
-                } else if (result == false) {
-                    resolve(false)
-                }
+                if (err) return reject(err);
+                
+                return resolve(result);
             });
         })
     },

@@ -5,79 +5,96 @@ const passkeys = require("./passkeys.js");
 module.exports = {
     root: function(app) {
         app.get("/", (req, res) => {
-            let response = {
+            res.json({
                 alive: true,
-                whitelist: false,
-                auth: false,
-            };
-
-            if (config.whitelist) {
-                response.whitelist = true;
-            }
-
-            if (config.auth) {
-                response.auth = true;
-            }
-
-            res.json(response);
+                whitelist: config.whitelist,
+                auth: config.auth,
+            });
         });
     },
+
+    // a list of valid software to avoid repeating code
+    validSoftware: ["vanilla"], 
 
     versions: function(app) {
         // API Endpoint to get MC Server Versions
         app.get("/versions/getVersionList", (req, res) => {
-            if (req.query.software == "vanilla") {
-                serverVersions.getVersionList("vanilla").then((versions) => {
+            let software = req.query?.software;
+            if (!this.validSoftware.includes(software)) 
+                return res.json({ error: "Invalid software" });
+            serverVersions
+                .getVersionList(software)
+                .then((versions) => {
                     res.json(versions);
                 });
-            }
         });
 
         // API Endpoint to get latest MC Server Version
         app.get("/versions/getLatestVersion", (req, res) => {
-            if (req.query.software == "vanilla") {
-                serverVersions.getVersionList("vanilla").then((versions) => {
+            let software = req.query?.software;
+            if (!this.validSoftware.includes(software)) 
+                return res.json({ error: "Invalid software" });
+            
+            serverVersions
+                .getVersionList(software)
+                .then((versions) => {
                     res.json(versions[0]);
                 });
-            }
         });
 
         // API Endpoint to get specific MC Server Version
         app.get("/versions/getVersion", (req, res) => {
-            if (req.query.software == "vanilla") {
-                serverVersions
-                    .getVersion("vanilla", req.query.version)
-                    .then((versions) => {
-                        res.json(versions);
-                    });
-            }
+            let software = req.query?.software;
+            if (!this.validSoftware.includes(software)) 
+                return res.json({ error: "Invalid software" });
+
+            serverVersions
+                .getVersion(software, req.query.version)
+                .then((versions) => {
+                    res.json(versions);
+                });
         });
 
         // API Endpoint to get MC Server Versions
         app.get("/versions/getVersionDownload", (req, res) => {
-            if (req.query.software == "vanilla") {
-                serverVersions
-                    .getVersionDownload("vanilla", req.query.version)
-                    .then((url) => {
-                        res.json({ id: req.query.version, url: url });
-                    });
-            }
+            let software = req.query?.software;
+            if (!this.validSoftware.includes(software)) 
+                return res.json({ error: "Invalid software" });
+
+            serverVersions
+                .getVersionDownload(software, req.query.version)
+                .then((url) => {
+                    res.json({ id: req.query.version, url: url });
+                });
         });
     },
 
     servers: function(app) {
-        app.get("/servers/getServers", (req, res) => {
-            if (req.query && req.query.passkey) {
-                passkeys.comparePasskey(req.query.passkey).then((response) => {
-                    if (response == true) {
-                        res.json({ servers: config.servers() });
-                    } else if (response == false) {
-                        res.json({ error: "BAD AUTHORIZATION" });
-                    }
-                });
-            } else {
-                res.json({ error: "NO AUTHORIZATION" });
+        app.get("/servers/getServers", async (req, res) => {
+            // if no auth, return servers
+            if (!config.auth()) {
+                return res.json({ servers: config.servers() });
             }
+
+            if (!req?.query?.passkey) {
+                return res.json({ error: "NO AUTHORIZATION" });
+            }
+            
+            // if auth, check passkey
+            try {
+                let response = await passkeys
+                    .comparePasskey(req.query.passkey);
+
+                if (!response) {
+                    return res.json({ error: "BAD AUTHORIZATION" });
+                }
+                
+                res.json({ servers: config.servers() });
+            } catch (error) {
+                return res.json({ error: err });
+                    
+            }
+
         });
     },
 };
