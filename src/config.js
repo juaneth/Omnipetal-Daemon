@@ -36,8 +36,7 @@ module.exports = {
 
     systemMemory: function() {
         return new Promise((resolve, reject) => {
-            let memory = si
-                .mem()
+            si.mem()
                 .then((data) => {
                     // Return total memory in GB
                     resolve(Math.round(data.total / 1024 / 1024 / 1024));
